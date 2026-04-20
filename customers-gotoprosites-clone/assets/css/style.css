@@ -1,0 +1,205 @@
+/*
+  Theme Name: GOT TO MEDIA Divi Child Theme
+  Theme URI: https://gottomedia.com
+  Version: 1.0.0
+  Template: Divi
+  Author: GOT TO MEDIA
+  Author URI: https://gottomedia.com
+  Description: Child Theme for Divi
+  Text Domain: got-to-media-divi-child-theme
+  License: GNU General Public License v2 or later
+  License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+/* Quick paste CSS for GoTo ProSites - paste into Divi Theme Options Custom CSS or child theme */
+/* GoTo ProSites - cleaned clamp-based CSS (paste into Divi Theme Options Custom CSS or child theme) */
+
+/* ---------- Variables ---------- */
+:root{
+  -gt-trust-blue: #007CFB;
+  -gt-trust-blue-dark: #0073E9;
+  -gt-action-orange: #FF9F1C;
+  -gt-deep-navy: #0B3A6F;
+  -gt-charcoal: #222831;
+  -white: #ffffff;
+
+  -max-width: 1200px;
+
+  -space-sm: clamp(8px, 0.75vw, 12px);
+  -space-md: clamp(16px, 1.5vw, 24px);
+  -space-lg: clamp(32px, 3.8vw, 64px);
+
+  -h1-min: 2rem;
+  -h1-max: 3rem;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { font-size: 16px; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body{
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--gt-charcoal);
+  background: var(--white);
+  line-height: 1.5;
+}
+
+/* ---------- Containers ---------- */
+.container{
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: calc(var(--space-sm) * 0.5);
+  padding-right: calc(var(--space-sm) * 0.5);
+}
+
+/* ---------- Header ---------- */
+.gt-site-header{
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: var(--white);
+  box-shadow: 0 6px 14px rgba(34,40,49,0.06);
+  border-bottom: 1px solid rgba(34,40,49,0.04);
+}
+
+/* Logo */
+.gt-logo {
+  font-family: "Poppins", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1rem, calc(0.9rem + 0.8vw), 1.5rem);
+  color: var(--gt-deep-navy);
+}
+
+/* ---------- Hero ---------- */
+.gt-hero{
+  padding-top: clamp(32px, 6vw, 96px);
+  padding-bottom: clamp(32px, 6vw, 96px);
+  position: relative;
+  background: linear-gradient(160deg, rgba(3,115,233,0.9) 0%, rgba(0,150,200,0.8) 100%);
+  overflow: hidden;
+}
+
+.gt-hero::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11,58,111,0.55) 0%, rgba(0,0,0,0.18) 100%);
+  z-index: 0;
+}
+
+.gt-hero .et_pb_module,
+.gt-hero .et_pb_text {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+
+/* kicker, headline, lead */
+.gt-kicker {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.gt-hero-h1 {
+  font-family: "Poppins", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(var(--h1-min), calc(2rem + 3.2vw), var(--h1-max));
+  line-height: 1.06;
+  margin: 0 0 var(--space-md) 0;
+  color: #fff;
+}
+
+.gt-lead {
+  font-size: clamp(1rem, calc(0.95rem + 0.75vw), 1.125rem);
+  color: rgba(255,255,255,0.92);
+  max-width: 65ch;
+  margin-bottom: var(--space-md);
+}
+
+/* ---------- Cards ---------- */
+.gt-card{
+  background: #fff;
+  border-radius: 10px;
+  padding: var(--space-md);
+  box-shadow: 0 6px 14px rgba(34,40,49,0.06);
+  border: 1px solid rgba(34,40,49,0.04);
+  color: var(--gt-charcoal);
+}
+
+/* ---------- Buttons ---------- */
+.gt-btn-primary,
+.gt-btn-secondary,
+.gt-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 44px;
+  padding: clamp(10px, 0.9vw, 14px) clamp(14px, 1.6vw, 20px);
+}
+
+.gt-btn-primary {
+  background: var(--gt-trust-blue-dark);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(3,102,219,0.18);
+  border: none;
+}
+
+.gt-btn-primary:hover {
+  background: #0066D6;
+  transform: translateY(-2px);
+}
+
+.gt-btn-secondary {
+  background: var(--gt-action-orange);
+  color: var(--gt-charcoal);
+  border: none;
+}
+
+.gt-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(11,58,111,0.08);
+  color: var(--gt-deep-navy);
+}
+
+/* ---------- Form ---------- */
+.gt-form {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Footer ---------- */
+.gt-site-footer {
+  padding: var(--space-lg) 0;
+  background: linear-gradient(180deg, rgba(11,58,111,0.02), rgba(11,58,111,0.04));
+  color: rgba(34,40,49,0.85);
+}
+
+/* ---------- Utilities ---------- */
+.text-center { text-align: center; }
+.muted { color: rgba(34,40,49,0.55); }
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 767px) {
+  .gt-hero {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}
+
+
+
