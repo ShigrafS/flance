@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  affiliate
+  admin
+  support_agent
+}
+
+enum UserStatus {
+  active
+  pending
+  disabled
+}
+
+enum TicketPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+enum TicketStatus {
+  open
+  in_progress
+  resolved
+  closed
+}
+
+enum TokenType {
+  refresh
+  password_reset
+  email_verification
+}
+
+model User {
+  id                String     @id @default(uuid())
+  email             String     @unique
+  passwordHash      String?
+  firstName         String
+  lastName          String
+  role              Role       @default(user)
+  status            UserStatus @default(pending)
+  emailVerifiedAt   DateTime?
+  stripeCustomerId  String?    @unique
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  subscriptions     Subscription[]
+  affiliateProfile  Affiliate?
+  referrals         Referral[]      @relation("ReferredUser")
+  tickets           SupportTicket[] @relation("TicketCreator")
+  assignedTickets   SupportTicket[] @relation("AssignedAgent")
+  ticketMessages    TicketMessage[]
+  auditLogs         AuditLog[]
+  authTokens        AuthToken[]
+}
+
+model Subscription {
+  id                   String   @id @default(uuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id])
+  stripeSubscriptionId String   @unique
+  stripePriceId        String
+  status               String   // Stripe status: active, trialing, past_due, canceled, incomplete, incomplete_expired
+  currency             String
+  interval             String
+  cancelAtPeriodEnd    Boolean  @default(false)
+  trialEnd             DateTime?
+  currentPeriodEnd     DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  referrals            Referral[]
+}
+
+model Affiliate {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  stripeCouponId   String   @unique
+  couponCode       String   @unique
+  payoutMethod     String
+  payoutEmail      String
+  lifetimeEarnings Int      @default(0) // cents
+  pendingEarnings  Int      @default(0) // cents
+  approvedAt       DateTime?
+  status           String   @default("active")
+  createdAt        DateTime @default(now())
+
+  referrals        Referral[]
+}
+
+model Referral {
+  id                     String   @id @default(uuid())
+  affiliateId            String
+  affiliate              Affiliate @relation(fields: [affiliateId], references: [id])
+  referredUserId         String
+  referredUser           User      @relation("ReferredUser", fields: [referredUserId], references: [id])
+  subscriptionId         String
+  subscription           Subscription @relation(fields: [subscriptionId], references: [id])
+  stripePaymentIntentId  String?
+  stripeInvoiceId        String?
+  commissionAmount       Int
+  status                 String    @default("pending") // pending, approved, rejected, paid
+  commissionStatusReason String?
+  validationDate         DateTime
+  paidAt                 DateTime?
+  createdAt              DateTime  @default(now())
+}
+
+model SupportTicket {
+  id              String         @id @default(uuid())
+  userId          String
+  user            User           @relation("TicketCreator", fields: [userId], references: [id])
+  assignedAgentId String?
+  assignedAgent   User?          @relation("AssignedAgent", fields: [assignedAgentId], references: [id])
+  subject         String
+  category        String
+  priority        TicketPriority @default(medium)
+  status          TicketStatus   @default(open)
+  lastMessageAt   DateTime       @default(now())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  messages        TicketMessage[]
+}
+
+model TicketMessage {
+  id        String   @id @default(uuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id])
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+  senderType String   // customer, agent
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model EmailLog {
+  id           String   @id @default(uuid())
+  recipient    String
+  templateName String
+  status       String
+  errorMessage String?
+  createdAt    DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  metadata  Json
+  createdAt DateTime @default(now())
+}
+
+model AuthToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  token     String    @unique
+  type      TokenType
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+}
