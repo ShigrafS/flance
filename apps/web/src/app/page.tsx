@@ -85,7 +85,7 @@ export default function Home() {
               Stop building someone else's equity. Invest in your own digital assets with GoTo ProSites.
             </p>
             <Link 
-              href="/pricing"
+              href="/get-started"
               className="inline-block bg-white text-[#0a2342] px-12 py-5 rounded-full font-black text-xl hover:bg-zinc-100 transition-all shadow-2xl"
             >
               GET STARTED NOW

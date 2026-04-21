@@ -148,7 +148,7 @@ export default function PricingPage() {
                     ))}
                   </ul>
                   <Link 
-                    href="/get-started"
+                    href={`/checkout/sign?plan=${encodeURIComponent(plan.name)}`}
                     className={`block w-full py-4 rounded-xl font-bold text-lg text-center transition-all ${
                       plan.highlighted 
                         ? "bg-[#2ca58d] text-white hover:bg-[#248f7a]" 
